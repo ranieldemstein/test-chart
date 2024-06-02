@@ -11,9 +11,9 @@
       background: transparent;
     }
     #chart {
-      height: 550px;
       width: 100%;
       position: relative;
+      padding-bottom: calc(100% / 1.587); /* Adjust the padding-bottom to maintain the ratio */
     }
     #legend {
       position: absolute;
@@ -153,7 +153,7 @@
 
         const chart = LightweightCharts.createChart(chartElement, {
           width: chartElement.clientWidth,
-          height: 550,
+          height: chartElement.clientWidth / 1.587,
           layout: {
             textColor: 'white',
             background: { type: 'solid', color: 'transparent' },
