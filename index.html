@@ -151,9 +151,7 @@
           return;
         }
 
-        const chart = LightweightCharts.createChart(chartElement, {
-          width: chartElement.clientWidth,
-          height: chartElement.clientWidth / 1.587,
+        const chartOptions = {
           layout: {
             textColor: 'white',
             background: { type: 'solid', color: 'transparent' },
@@ -181,12 +179,20 @@
           handleScroll: {
             mouseWheel: false,
             pressedMouseMove: true,
+            horzTouchDrag: false,
+            vertTouchDrag: false,
           },
           handleScale: {
             axisPressedMouseMove: true,
             mouseWheel: false,
             pinch: false,
           },
+        };
+
+        const chart = LightweightCharts.createChart(chartElement, {
+          ...chartOptions,
+          width: chartElement.clientWidth,
+          height: chartElement.clientWidth / 1.587,
         });
 
         const areaSeries = chart.addAreaSeries({
