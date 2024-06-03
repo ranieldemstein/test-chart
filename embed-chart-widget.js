@@ -19,7 +19,7 @@
     var iframe = document.createElement('iframe');
     iframe.style.border = 'none';
     iframe.style.width = '100%';
-    iframe.style.height = '100%';
+    iframe.style.height = '500px';  // Set the height you desire
     iframe.style.position = 'absolute';
     iframe.style.top = '0';
     iframe.style.left = '0';
