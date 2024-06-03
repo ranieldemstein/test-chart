@@ -12,8 +12,8 @@
     }
     #chart {
       width: 100%;
+      height: 100%;
       position: relative;
-      padding-bottom: calc(100% / 1.587); /* Adjust the padding-bottom to maintain the ratio */
     }
     #legend {
       position: absolute;
@@ -189,11 +189,7 @@
           },
         };
 
-        const chart = LightweightCharts.createChart(chartElement, {
-          ...chartOptions,
-          width: chartElement.clientWidth,
-          height: chartElement.clientWidth / 1.587,
-        });
+        const chart = LightweightCharts.createChart(chartElement, chartOptions);
 
         const areaSeries = chart.addAreaSeries({
           topColor: '#06cbf8',
