@@ -1,4 +1,6 @@
 window.createChartWidget = function(config) {
+  console.log("createChartWidget called with config:", config);
+  
   var container = document.getElementById(config.containerId);
   if (!container) {
     console.error('Container element not found');
@@ -105,6 +107,8 @@ window.createChartWidget = function(config) {
   });
 
   async function fetchStockData(range) {
+    console.log("Fetching stock data for range:", range);
+    
     const apiKey = '9htrZy1d7DYcG21DJKi6YwCo1_rCMfN8';
     const now = new Date();
     let fromDate;
@@ -146,6 +150,7 @@ window.createChartWidget = function(config) {
     try {
       const response = await fetch(`https://api.polygon.io/v2/aggs/ticker/${config.ticker}/range/${multiplier}/${timespan}/${fromDate}/${toDate}?apiKey=${apiKey}`);
       const data = await response.json();
+      console.log("Data fetched:", data);
       if (data.results) {
         const results = data.results.map(item => ({
           time: item.t / 1000,
@@ -172,6 +177,8 @@ window.createChartWidget = function(config) {
   }
 
   async function setChartRange(range) {
+    console.log("Setting chart range to:", range);
+    
     config.currentRange = range;
     const stockData = await fetchStockData(range);
     areaSeries.setData(stockData);
@@ -279,4 +286,6 @@ window.createChartWidget = function(config) {
       mode: LightweightCharts.PriceScaleMode.Percentage,
     });
   });
+
+  console.log("Chart widget initialized.");
 };
