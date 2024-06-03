@@ -14,7 +14,7 @@
       overflow: hidden;
     }
     #chart-container {
-      height: 100%;
+      height: calc(100% - 50px); /* Adjust this value if needed to ensure the buttons fit within the viewport */
       width: 100%;
       position: absolute;
       top: 0;
@@ -75,12 +75,12 @@
   <div id="chart-container">
     <div id="chart"></div>
     <div id="legend"></div>
-    <div id="controls-container">
-      <div id="buttons-container"></div>
-      <div id="toggle-container">
-        <button id="toggle-price">$</button>
-        <button id="toggle-percentage">%</button>
-      </div>
+  </div>
+  <div id="controls-container">
+    <div id="buttons-container"></div>
+    <div id="toggle-container">
+      <button id="toggle-price">$</button>
+      <button id="toggle-percentage">%</button>
     </div>
   </div>
 
