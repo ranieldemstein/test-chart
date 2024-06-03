@@ -11,6 +11,7 @@
   }
 
   function initializeChartWidget(config) {
+    console.log("Initializing chart widget with config:", config);
     loadScript('https://raw.githack.com/ranieldemstein/test-chart/main/stock-chart.js', function() {
       if (typeof window.createChartWidget === 'function') {
         window.createChartWidget(config);
