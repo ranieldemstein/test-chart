@@ -1,25 +1,16 @@
 (function() {
-  function loadScript(src, callback) {
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = src;
-    script.onload = callback;
-    script.onerror = function() {
-      console.error('Error loading script:', src);
-    };
-    document.head.appendChild(script);
-  }
+  window.createChartWidget = function(config) {
+    var container = document.getElementById(config.containerId);
+    if (!container) {
+      console.error('Container element not found');
+      return;
+    }
 
-  function initializeChartWidget(config) {
-    console.log("Initializing chart widget with config:", config);
-    loadScript('https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js', function() {
-      if (typeof window.createChartWidget === 'function') {
-        window.createChartWidget(config);
-      } else {
-        console.error('Chart widget script did not load correctly.');
-      }
-    });
-  }
-
-  window.createChartWidget = initializeChartWidget;
+    var iframe = document.createElement('iframe');
+    iframe.style.border = 'none';
+    iframe.style.width = '100%';
+    iframe.style.height = '100%';
+    iframe.src = 'https://raw.githack.com/ranieldemstein/test-chart/main/index.html?ticker=' + encodeURIComponent(config.ticker);
+    container.appendChild(iframe);
+  };
 })();
