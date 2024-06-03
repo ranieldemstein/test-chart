@@ -12,7 +12,7 @@
 
   function initializeChartWidget(config) {
     console.log("Initializing chart widget with config:", config);
-    loadScript('https://raw.githack.com/ranieldemstein/test-chart/main/stock-chart.js', function() {
+    loadScript('https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js', function() {
       if (typeof window.createChartWidget === 'function') {
         window.createChartWidget(config);
       } else {
