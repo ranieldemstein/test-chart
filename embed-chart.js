@@ -20,7 +20,15 @@
         return;
       }
 
-      container.innerHTML = '<div id="chart" style="height: 100%; width: 100%; position: relative;"></div>';
+      container.innerHTML = `
+        <div id="chart" style="height: calc(100% - 40px); width: 100%; position: relative;"></div>
+        <div id="controls-container" style="height: 40px; display: flex; justify-content: center; align-items: center;">
+          <button class="chart-button" data-range="1D">1D</button>
+          <button class="chart-button" data-range="1W">1W</button>
+          <button class="chart-button" data-range="1M">1M</button>
+          <button class="chart-button" data-range="1Y">1Y</button>
+        </div>
+      `;
       var chartElement = document.getElementById('chart');
       console.log('Container for chart initialized');
 
@@ -145,6 +153,15 @@
             throw error;
           });
       }
+
+      document.querySelectorAll('.chart-button').forEach(button => {
+        button.addEventListener('click', function() {
+          const range = this.getAttribute('data-range');
+          fetchStockData(ticker, range).then(data => {
+            areaSeries.setData(data);
+          });
+        });
+      });
     });
   }
 
