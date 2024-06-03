@@ -10,7 +10,6 @@
   function createChart(containerId, ticker) {
     console.log('Creating chart for ticker:', ticker);
     loadScript('https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js', function() {
-      // The container for the chart
       var container = document.getElementById(containerId);
       if (!container) {
         console.error('Container element not found');
@@ -66,7 +65,6 @@
         crossHairMarkerVisible: false,
       });
 
-      // Fetch and set stock data
       fetchStockData(ticker, '1D').then(data => areaSeries.setData(data));
 
       function fetchStockData(ticker, range) {
@@ -78,7 +76,7 @@
 
         switch (range) {
           case '1D':
-            fromDate = new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000); // Look back up to 5 days
+            fromDate = new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000); 
             multiplier = 5;
             timespan = 'minute';
             break;
@@ -117,7 +115,6 @@
                 value: item.c,
               }));
 
-              // Filter for the most recent market day
               if (range === '1D') {
                 const latestDay = new Date(Math.max(...results.map(item => item.time * 1000)));
                 const startOfDay = new Date(latestDay.setHours(0, 0, 0, 0));
