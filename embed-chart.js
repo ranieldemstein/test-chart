@@ -4,6 +4,9 @@
     script.type = 'text/javascript';
     script.src = src;
     script.onload = callback;
+    script.onerror = function() {
+      console.error('Error loading script:', src);
+    };
     document.head.appendChild(script);
   }
 
