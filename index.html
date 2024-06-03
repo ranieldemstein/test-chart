@@ -14,7 +14,7 @@
       overflow: hidden;
     }
     #chart-container {
-      height: calc(100% - 50px); /* Adjust this value if needed to ensure the buttons fit within the viewport */
+      height: calc(100% - 50px);
       width: 100%;
       position: absolute;
       top: 0;
@@ -43,7 +43,8 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 10px;
+      padding: 0 20px;
+      box-sizing: border-box;
     }
     #buttons-container {
       display: flex;
@@ -108,7 +109,8 @@
 
         switch (range) {
           case '1D':
-            fromDate = new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000); // Look back up to 5 days
+            fromDate = new Date(now.getTime());
+            fromDate.setDate(now.getDate() - 5); // Look back up to 5 days
             multiplier = 5;
             timespan = 'minute';
             break;
@@ -143,11 +145,21 @@
           const data = await response.json();
           console.log('Data fetched:', data);
 
-          if (data.results) {
-            return data.results.map(item => ({
+          if (data.results && data.results.length > 0) {
+            let results = data.results.map(item => ({
               time: item.t / 1000,
               value: item.c,
             }));
+
+            // Filter for the most recent market day
+            if (range === '1D') {
+              const latestDay = Math.max(...results.map(item => item.time * 1000));
+              const startOfDay = new Date(latestDay);
+              startOfDay.setHours(0, 0, 0, 0);
+              results = results.filter(item => item.time * 1000 >= startOfDay.getTime());
+            }
+
+            return results;
           } else {
             console.error('No data results', data);
             return [];
