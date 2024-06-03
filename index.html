@@ -180,10 +180,12 @@
           },
           handleScroll: {
             mouseWheel: false,
-            pressedMouseMove: true,
+            pressedMouseMove: false,
+            horzTouchDrag: false,
+            vertTouchDrag: false,
           },
           handleScale: {
-            axisPressedMouseMove: true,
+            axisPressedMouseMove: false,
             mouseWheel: false,
             pinch: false,
           },
@@ -202,7 +204,11 @@
 
         function formatDate(timestamp) {
           const date = new Date(timestamp * 1000);
-          return date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+          if (currentRange === '1D') {
+            return date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+          } else {
+            return date.toLocaleDateString('en-US');
+          }
         }
 
         function formatPrice(price) {
@@ -230,6 +236,7 @@
         });
 
         async function setChartRange(range) {
+          currentRange = range;
           const stockData = await fetchStockData(range);
           areaSeries.setData(stockData);
           if (range === '1D') {
@@ -294,6 +301,7 @@
         });
       }
 
+      let currentRange = '1D';
       createStockChart();
     });
   </script>
