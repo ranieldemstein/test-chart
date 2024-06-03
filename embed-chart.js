@@ -2,8 +2,8 @@
   console.log("Embed script loaded");
   
   var container = document.createElement('div');
-  container.style.height = '100%';
-  container.style.width = '100%';
+  container.style.height = '100vh'; // Ensure the container fills the viewport height
+  container.style.width = '100vw'; // Ensure the container fills the viewport width
   container.style.position = 'relative';
   container.style.overflow = 'hidden';  // Ensure no overflow issues
   console.log("Container created");
@@ -16,6 +16,8 @@
   iframe.style.top = '0';
   iframe.style.left = '0';
   iframe.src = 'https://raw.githack.com/ranieldemstein/test-chart/main/index.html?ticker=' + encodeURIComponent('AAPL'); // Change 'AAPL' to your default ticker
+  iframe.allowTransparency = 'true';
+  iframe.style.background = 'transparent';
   console.log("Iframe created with src: " + iframe.src);
 
   container.appendChild(iframe);
