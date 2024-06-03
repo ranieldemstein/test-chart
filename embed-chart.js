@@ -8,8 +8,12 @@
   }
 
   function createChart(containerId, ticker) {
-    console.log('Creating chart for ticker:', ticker); // Log the ticker
+    console.log('Creating chart for ticker:', ticker);
+
+    // Load the Lightweight Charts library
     loadScript('https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js', function() {
+      console.log('Loaded lightweight-charts library');
+      
       var container = document.getElementById(containerId);
       if (!container) {
         console.error('Container element not found');
@@ -21,8 +25,8 @@
       console.log('Container for chart initialized');
 
       const chart = LightweightCharts.createChart(chartElement, {
-        width: container.clientWidth,
-        height: container.clientHeight,
+        width: chartElement.clientWidth,
+        height: chartElement.clientHeight,
         layout: {
           textColor: 'white',
           background: { type: 'solid', color: 'transparent' },
@@ -66,7 +70,12 @@
         crossHairMarkerVisible: false,
       });
 
-      fetchStockData(ticker, '1D').then(data => areaSeries.setData(data));
+      fetchStockData(ticker, '1D').then(data => {
+        console.log('Data fetched:', data);
+        areaSeries.setData(data);
+      }).catch(error => {
+        console.error('Error fetching data:', error);
+      });
 
       function fetchStockData(ticker, range) {
         const apiKey = '9htrZy1d7DYcG21DJKi6YwCo1_rCMfN8';
@@ -107,6 +116,8 @@
         fromDate = fromDate.toISOString().split('T')[0];
         const toDate = new Date().toISOString().split('T')[0];
 
+        console.log(`Fetching data from ${fromDate} to ${toDate} for ticker ${ticker}`);
+
         return fetch(`https://api.polygon.io/v2/aggs/ticker/${ticker}/range/${multiplier}/${timespan}/${fromDate}/${toDate}?apiKey=${apiKey}`)
           .then(response => response.json())
           .then(data => {
@@ -131,7 +142,7 @@
           })
           .catch(error => {
             console.error('Fetch error', error);
-            return [];
+            throw error;
           });
       }
     });
