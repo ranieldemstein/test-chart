@@ -1,17 +1,17 @@
 window.createChartWidget = function(config) {
   console.log("createChartWidget called with config:", config);
-  
+
   var container = document.getElementById(config.containerId);
   if (!container) {
     console.error('Container element not found');
     return;
   }
 
+  container.innerHTML = '';  // Clear the container
+
   var chartContainer = document.createElement('div');
-  chartContainer.id = 'chart-container';
   chartContainer.style.height = '100%';
   chartContainer.style.width = '100%';
-  chartContainer.style.position = 'relative';
   container.appendChild(chartContainer);
 
   var chart = LightweightCharts.createChart(chartContainer, {
@@ -63,7 +63,6 @@ window.createChartWidget = function(config) {
   });
 
   var legend = document.createElement('div');
-  legend.id = 'legend';
   legend.style.position = 'absolute';
   legend.style.top = '10px';
   legend.style.left = '10px';
@@ -108,7 +107,7 @@ window.createChartWidget = function(config) {
 
   async function fetchStockData(range) {
     console.log("Fetching stock data for range:", range);
-    
+
     const apiKey = '9htrZy1d7DYcG21DJKi6YwCo1_rCMfN8';
     const now = new Date();
     let fromDate;
@@ -178,7 +177,7 @@ window.createChartWidget = function(config) {
 
   async function setChartRange(range) {
     console.log("Setting chart range to:", range);
-    
+
     config.currentRange = range;
     const stockData = await fetchStockData(range);
     areaSeries.setData(stockData);
@@ -215,7 +214,6 @@ window.createChartWidget = function(config) {
   setChartRange('1D'); // Set 1D as default
 
   var buttonContainer = document.createElement('div');
-  buttonContainer.id = 'buttons-container';
   buttonContainer.style.display = 'flex';
   buttonContainer.style.flexDirection = 'row';
   buttonContainer.style.gap = '8px';
@@ -240,7 +238,6 @@ window.createChartWidget = function(config) {
   });
 
   var toggleContainer = document.createElement('div');
-  toggleContainer.id = 'toggle-container';
   toggleContainer.style.display = 'flex';
   toggleContainer.style.flexDirection = 'row';
   toggleContainer.style.gap = '8px';
@@ -250,7 +247,6 @@ window.createChartWidget = function(config) {
   chartContainer.appendChild(toggleContainer);
 
   var priceButton = document.createElement('button');
-  priceButton.id = 'toggle-price';
   priceButton.innerText = '$';
   priceButton.style.fontFamily = 'Arial, sans-serif';
   priceButton.style.fontSize = '12px';
@@ -263,7 +259,6 @@ window.createChartWidget = function(config) {
   toggleContainer.appendChild(priceButton);
 
   var percentageButton = document.createElement('button');
-  percentageButton.id = 'toggle-percentage';
   percentageButton.innerText = '%';
   percentageButton.style.fontFamily = 'Arial, sans-serif';
   percentageButton.style.fontSize = '12px';
