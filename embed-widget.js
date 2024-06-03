@@ -12,7 +12,7 @@
     var iframe = document.createElement('iframe');
     iframe.style.border = 'none';
     iframe.style.width = '100%';
-    iframe.style.height = '500px'; // You can adjust this height as needed
+    iframe.style.height = '500px'; // Fixed height for now
     iframe.src = config.srcUrl + '?ticker=' + encodeURIComponent(config.ticker);
 
     container.appendChild(iframe);
