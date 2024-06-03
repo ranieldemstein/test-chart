@@ -8,7 +8,7 @@
   }
 
   function createChart(containerId, ticker) {
-    console.log('Creating chart for ticker:', ticker);
+    console.log('Creating chart for ticker:', ticker); // Log the ticker
     loadScript('https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js', function() {
       var container = document.getElementById(containerId);
       if (!container) {
@@ -18,6 +18,7 @@
 
       container.innerHTML = '<div id="chart" style="height: 100%; width: 100%; position: relative;"></div>';
       var chartElement = document.getElementById('chart');
+      console.log('Container for chart initialized');
 
       const chart = LightweightCharts.createChart(chartElement, {
         width: container.clientWidth,
