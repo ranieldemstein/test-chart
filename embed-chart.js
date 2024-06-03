@@ -8,6 +8,7 @@
   }
 
   function createChart(containerId, ticker) {
+    console.log('Creating chart for ticker:', ticker);
     loadScript('https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js', function() {
       loadScript('https://raw.githack.com/ranieldemstein/test-chart/main/stock-chart.js', function() {
         // The container for the chart
