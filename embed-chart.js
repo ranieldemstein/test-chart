@@ -100,4 +100,183 @@ window.createChartWidget = function(config) {
     }
     const price = param.seriesData.get(areaSeries);
     if (price) {
-      setLegendText(config.ticker, formatDate(param.time), formatP
+      setLegendText(config.ticker, formatDate(param.time), formatPrice(price.value));
+    }
+  });
+
+  async function fetchStockData(range) {
+    const apiKey = '9htrZy1d7DYcG21DJKi6YwCo1_rCMfN8';
+    const now = new Date();
+    let fromDate;
+    let multiplier;
+    let timespan;
+
+    switch (range) {
+      case '1D':
+        fromDate = new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000); // Look back up to 5 days
+        multiplier = 5;
+        timespan = 'minute';
+        break;
+      case '1W':
+        fromDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        multiplier = 30;
+        timespan = 'minute';
+        break;
+      case '1M':
+        fromDate = new Date(now.getTime());
+        fromDate.setMonth(now.getMonth() - 1);
+        multiplier = 1;
+        timespan = 'day';
+        break;
+      case '1Y':
+        fromDate = new Date(now.getTime());
+        fromDate.setFullYear(now.getFullYear() - 1);
+        multiplier = 1;
+        timespan = 'day';
+        break;
+      default:
+        fromDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+        multiplier = 5;
+        timespan = 'minute';
+    }
+
+    fromDate = fromDate.toISOString().split('T')[0];
+    const toDate = new Date().toISOString().split('T')[0];
+
+    try {
+      const response = await fetch(`https://api.polygon.io/v2/aggs/ticker/${config.ticker}/range/${multiplier}/${timespan}/${fromDate}/${toDate}?apiKey=${apiKey}`);
+      const data = await response.json();
+      if (data.results) {
+        const results = data.results.map(item => ({
+          time: item.t / 1000,
+          value: item.c,
+        }));
+
+        // Filter for the most recent market day
+        if (range === '1D') {
+          const latestDay = new Date(Math.max(...results.map(item => item.time * 1000)));
+          const startOfDay = new Date(latestDay.setHours(0, 0, 0, 0));
+          const endOfDay = new Date(latestDay.setHours(23, 59, 59, 999));
+          return results.filter(item => item.time * 1000 >= startOfDay && item.time * 1000 <= endOfDay);
+        }
+
+        return results;
+      } else {
+        console.error('No data results', data);
+        return [];
+      }
+    } catch (error) {
+      console.error('Fetch error', error);
+      return [];
+    }
+  }
+
+  async function setChartRange(range) {
+    config.currentRange = range;
+    const stockData = await fetchStockData(range);
+    areaSeries.setData(stockData);
+    if (range === '1D') {
+      chart.applyOptions({
+        timeScale: {
+          timeVisible: true,
+          secondsVisible: false,
+          tickMarkFormatter: (time, tickMarkType, locale) => {
+            const date = new Date(time * 1000);
+            return date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+          },
+        },
+      });
+    } else {
+      chart.applyOptions({
+        timeScale: {
+          timeVisible: true,
+          secondsVisible: false,
+          tickMarkFormatter: (time, tickMarkType, locale) => {
+            const date = new Date(time * 1000);
+            return date.toLocaleDateString('en-US');
+          },
+        },
+      });
+    }
+    const lastData = stockData[stockData.length - 1];
+    if (lastData) {
+      setLegendText(config.ticker, formatDate(lastData.time), formatPrice(lastData.value));
+    }
+    chart.timeScale().fitContent();
+  }
+
+  setChartRange('1D'); // Set 1D as default
+
+  var buttonContainer = document.createElement('div');
+  buttonContainer.id = 'buttons-container';
+  buttonContainer.style.display = 'flex';
+  buttonContainer.style.flexDirection = 'row';
+  buttonContainer.style.gap = '8px';
+  buttonContainer.style.position = 'absolute';
+  buttonContainer.style.bottom = '10px';
+  buttonContainer.style.left = '10px';
+  chartContainer.appendChild(buttonContainer);
+
+  ['1D', '1W', '1M', '1Y'].forEach(range => {
+    var button = document.createElement('button');
+    button.innerText = range;
+    button.style.fontFamily = 'Arial, sans-serif';
+    button.style.fontSize = '12px';
+    button.style.padding = '6px 12px';
+    button.style.border = 'none';
+    button.style.backgroundColor = 'rgba(6, 203, 248, 0.5)';
+    button.style.borderRadius = '5px';
+    button.style.cursor = 'pointer';
+    button.style.color = 'black';
+    button.addEventListener('click', () => setChartRange(range));
+    buttonContainer.appendChild(button);
+  });
+
+  var toggleContainer = document.createElement('div');
+  toggleContainer.id = 'toggle-container';
+  toggleContainer.style.display = 'flex';
+  toggleContainer.style.flexDirection = 'row';
+  toggleContainer.style.gap = '8px';
+  toggleContainer.style.position = 'absolute';
+  toggleContainer.style.bottom = '10px';
+  toggleContainer.style.right = '10px';
+  chartContainer.appendChild(toggleContainer);
+
+  var priceButton = document.createElement('button');
+  priceButton.id = 'toggle-price';
+  priceButton.innerText = '$';
+  priceButton.style.fontFamily = 'Arial, sans-serif';
+  priceButton.style.fontSize = '12px';
+  priceButton.style.padding = '6px 12px';
+  priceButton.style.border = 'none';
+  priceButton.style.backgroundColor = 'rgba(6, 203, 248, 0.5)';
+  priceButton.style.borderRadius = '5px';
+  priceButton.style.cursor = 'pointer';
+  priceButton.style.color = 'black';
+  toggleContainer.appendChild(priceButton);
+
+  var percentageButton = document.createElement('button');
+  percentageButton.id = 'toggle-percentage';
+  percentageButton.innerText = '%';
+  percentageButton.style.fontFamily = 'Arial, sans-serif';
+  percentageButton.style.fontSize = '12px';
+  percentageButton.style.padding = '6px 12px';
+  percentageButton.style.border = 'none';
+  percentageButton.style.backgroundColor = 'rgba(6, 203, 248, 0.5)';
+  percentageButton.style.borderRadius = '5px';
+  percentageButton.style.cursor = 'pointer';
+  percentageButton.style.color = 'black';
+  toggleContainer.appendChild(percentageButton);
+
+  priceButton.addEventListener('click', () => {
+    chart.priceScale('right').applyOptions({
+      mode: LightweightCharts.PriceScaleMode.Normal,
+    });
+  });
+
+  percentageButton.addEventListener('click', () => {
+    chart.priceScale('right').applyOptions({
+      mode: LightweightCharts.PriceScaleMode.Percentage,
+    });
+  });
+};
