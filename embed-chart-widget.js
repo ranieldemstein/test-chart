@@ -13,6 +13,9 @@
       return;
     }
 
+    // Clear the container if there's any existing iframe
+    container.innerHTML = '';
+
     var iframe = document.createElement('iframe');
     iframe.style.border = 'none';
     iframe.style.width = '100%';
