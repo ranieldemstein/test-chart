@@ -14,7 +14,7 @@
       overflow: hidden;
     }
     #chart-container {
-      height: calc(100% - 50px);
+      height: calc(100% - 70px); /* Adjusted to leave space for buttons */
       width: 100%;
       position: absolute;
       top: 0;
@@ -37,14 +37,15 @@
     }
     #controls-container {
       position: absolute;
-      bottom: 10px;
+      bottom: 0;
       left: 0;
       width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 20px;
+      padding: 10px 20px; /* Adjust padding as needed */
       box-sizing: border-box;
+      background: rgba(0, 0, 0, 0.5); /* Add a background for better visibility */
     }
     #buttons-container {
       display: flex;
@@ -79,22 +80,19 @@
         left: 0;
       }
       #controls-container {
-        display: flex;
-        justify-content: space-between;
-        padding: 0 10px;
         flex-wrap: wrap;
+        gap: 8px;
+        padding: 10px; /* Adjust padding as needed */
+      }
+      #buttons-container, #toggle-container {
+        width: 100%;
+        justify-content: space-between;
       }
       #buttons-container {
-        display: flex;
-        flex-direction: row;
-        gap: 4px;
         flex: 1;
         justify-content: flex-start;
       }
       #toggle-container {
-        display: flex;
-        flex-direction: row;
-        gap: 4px;
         flex: 1;
         justify-content: flex-end;
       }
@@ -110,12 +108,7 @@
     <div id="legend"></div>
   </div>
   <div id="controls-container">
-    <div id="buttons-container">
-      <button id="range-1d">1D</button>
-      <button id="range-1w">1W</button>
-      <button id="range-1m">1M</button>
-      <button id="range-1y">1Y</button>
-    </div>
+    <div id="buttons-container"></div>
     <div id="toggle-container">
       <button id="toggle-price">$</button>
       <button id="toggle-percentage">%</button>
