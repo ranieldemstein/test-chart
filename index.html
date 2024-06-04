@@ -331,7 +331,6 @@
 
         setChartRange('1D'); // Set 1D as default
 
-        const container = document.getElementById('buttons-container');
         const ranges = ['1D', '1W', '1M', '1Y'];
         ranges.forEach(range => {
           const button = document.createElement('button');
@@ -342,7 +341,7 @@
           button.addEventListener('mouseout', () => button.style.backgroundColor = 'rgba(6, 203, 248, 0.5)');
           button.addEventListener('mousedown', () => button.style.backgroundColor = 'rgba(6, 203, 248, 0.9)');
           button.addEventListener('mouseup', () => button.style.backgroundColor = 'rgba(6, 203, 248, 0.7)');
-          container.appendChild(button);
+          document.getElementById('buttons-container').appendChild(button);
         });
 
         const priceButton = document.getElementById('toggle-price');
@@ -369,6 +368,10 @@
         percentageButton.addEventListener('mouseout', () => percentageButton.style.backgroundColor = 'rgba(6, 203, 248, 0.5)');
         percentageButton.addEventListener('mousedown', () => percentageButton.style.backgroundColor = 'rgba(6, 203, 248, 0.9)');
         percentageButton.addEventListener('mouseup', () => percentageButton.style.backgroundColor = 'rgba(6, 203, 248, 0.7)');
+
+        // Adding the buttons to the container
+        document.getElementById('toggle-container').appendChild(priceButton);
+        document.getElementById('toggle-container').appendChild(percentageButton);
       }
 
       let currentRange = '1D';
