@@ -79,19 +79,24 @@
         left: 0;
       }
       #controls-container {
-        flex-wrap: wrap;
-        gap: 8px;
-        padding: 0 10px;
-      }
-      #buttons-container, #toggle-container {
-        width: 100%;
+        display: flex;
         justify-content: space-between;
+        padding: 0 10px;
+        flex-wrap: wrap;
       }
       #buttons-container {
+        display: flex;
+        flex-direction: row;
+        gap: 4px;
         flex: 1;
+        justify-content: flex-start;
       }
       #toggle-container {
-        flex-shrink: 0;
+        display: flex;
+        flex-direction: row;
+        gap: 4px;
+        flex: 1;
+        justify-content: flex-end;
       }
       button {
         padding: 6px 10px;
@@ -105,7 +110,12 @@
     <div id="legend"></div>
   </div>
   <div id="controls-container">
-    <div id="buttons-container"></div>
+    <div id="buttons-container">
+      <button id="range-1d">1D</button>
+      <button id="range-1w">1W</button>
+      <button id="range-1m">1M</button>
+      <button id="range-1y">1Y</button>
+    </div>
     <div id="toggle-container">
       <button id="toggle-price">$</button>
       <button id="toggle-percentage">%</button>
@@ -322,7 +332,6 @@
 
         setChartRange('1D'); // Set 1D as default
 
-        const container = document.getElementById('buttons-container');
         const ranges = ['1D', '1W', '1M', '1Y'];
         ranges.forEach(range => {
           const button = document.createElement('button');
@@ -333,7 +342,7 @@
           button.addEventListener('mouseout', () => button.style.backgroundColor = 'rgba(6, 203, 248, 0.5)');
           button.addEventListener('mousedown', () => button.style.backgroundColor = 'rgba(6, 203, 248, 0.9)');
           button.addEventListener('mouseup', () => button.style.backgroundColor = 'rgba(6, 203, 248, 0.7)');
-          container.appendChild(button);
+          document.getElementById('buttons-container').appendChild(button);
         });
 
         const priceButton = document.getElementById('toggle-price');
